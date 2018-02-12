@@ -1,24 +1,26 @@
+'use strict';
+
 /*jshint esversion: 6 */
-let countdown;
-let secondsLeft;
-let timers = [];
-const timersPredefined = ['15+5+15+9+15', '15+15+15', '15+10+15'];
-const nextTimers = document.getElementById('nextTimers');
-const displayArea = document.getElementById('displayArea');
-const timerInput = document.getElementById('timerInput');
-const timerRunButton = document.getElementById('timerRun');
-const timerDisplay = document.querySelector('.displayTimeLeft');
-const timerTotalTime = document.querySelector('.displayTimeTotal');
-const soundComplete = document.getElementById('complete');
+var countdown = void 0;
+var secondsLeft = void 0;
+var timers = [];
+var timersPredefined = ['15+5+15+9+15', '15+15+15', '15+10+15'];
+var nextTimers = document.getElementById('nextTimers');
+var displayArea = document.getElementById('displayArea');
+var timerInput = document.getElementById('timerInput');
+var timerRunButton = document.getElementById('timerRun');
+var timerDisplay = document.querySelector('.displayTimeLeft');
+var timerTotalTime = document.querySelector('.displayTimeTotal');
+var soundComplete = document.getElementById('complete');
 
 function countdownOver() {
     soundComplete.play();
 }
 
 function displayTimeLeft(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainderSeconds = seconds % 60;
-    const display = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+    var minutes = Math.floor(seconds / 60);
+    var remainderSeconds = seconds % 60;
+    var display = minutes + ':' + (remainderSeconds < 10 ? '0' : '') + remainderSeconds;
     document.title = display;
     timerDisplay.textContent = display;
 }
@@ -28,16 +30,16 @@ function displayTotalTime(arr) {
         timerTotalTime.textContent = '';
         return;
     }
-    let total = arr.reduce((a, v) => {
+    var total = arr.reduce(function (a, v) {
         return parseInt(a) + parseInt(v);
     });
-    timerTotalTime.textContent = `total timers time is: ${total} ${total == 1 ? 'minute' : "minutes"}`;
+    timerTotalTime.textContent = 'total timers time is: ' + total + ' ' + (total == 1 ? 'minute' : "minutes");
 }
 
 function displayTimersPredefined(arr) {
-    const insertArea = document.createDocumentFragment();
-    for (let i = 0; i < arr.length; i++) {
-        const insertElement = document.createElement('button');
+    var insertArea = document.createDocumentFragment();
+    for (var i = 0; i < arr.length; i++) {
+        var insertElement = document.createElement('button');
         insertElement.className = "display__time-predefined";
         insertElement.innerHTML = timersPredefined[i];
         insertArea.appendChild(insertElement);
@@ -50,32 +52,32 @@ function displayNextTimers() {
         nextTimers.innerHTML = '';
     }
     if (timers.length == 1) {
-        const insertCurrentElement = document.createElement("li");
+        var insertCurrentElement = document.createElement("li");
         insertCurrentElement.className = "nextTimers__item";
         insertCurrentElement.innerHTML = 'No more timers';
         nextTimers.appendChild(insertCurrentElement);
     }
-    const insertArea = document.createDocumentFragment();
-    for (let i = timers.length - 2; i >= 0; i--) {
-        const insertCurrentElement = document.createElement("li");
-        const startBtn = document.createElement('button');
+    var insertArea = document.createDocumentFragment();
+    for (var i = timers.length - 2; i >= 0; i--) {
+        var _insertCurrentElement = document.createElement("li");
+        var startBtn = document.createElement('button');
         startBtn.className = "startBtn";
         startBtn.setAttribute("data-arrPos", i + 1 - timers.length);
         startBtn.innerHTML = timers[i];
-        const deleteBtn = document.createElement('button');
+        var deleteBtn = document.createElement('button');
         deleteBtn.className = "deleteBtn";
         deleteBtn.setAttribute("data-arrPos", i - timers.length);
         deleteBtn.innerHTML = "delete";
-        insertCurrentElement.className = "nextTimers__item";
-        insertCurrentElement.appendChild(startBtn);
-        insertCurrentElement.appendChild(deleteBtn);
-        insertArea.appendChild(insertCurrentElement);
+        _insertCurrentElement.className = "nextTimers__item";
+        _insertCurrentElement.appendChild(startBtn);
+        _insertCurrentElement.appendChild(deleteBtn);
+        insertArea.appendChild(_insertCurrentElement);
     }
     nextTimers.appendChild(insertArea);
 }
 
 function valuesToArray(timerSet) {
-    let minutes;
+    var minutes = void 0;
     if (timerSet.value) {
         minutes = timerSet.value;
         timerSet.value = '';
@@ -90,10 +92,10 @@ function timer(seconds) {
     clearInterval(countdown);
     displayNextTimers();
     displayTotalTime(timers);
-    const now = Date.now();
-    const then = now + seconds * 1000;
+    var now = Date.now();
+    var then = now + seconds * 1000;
     displayTimeLeft(seconds);
-    countdown = setInterval(() => {
+    countdown = setInterval(function () {
         secondsLeft = Math.round((then - Date.now()) / 1000);
         if (secondsLeft < 0) {
             countdownOver();
@@ -136,8 +138,8 @@ function timerPauseResume() {
 
 displayTimersPredefined(timersPredefined);
 
-nextTimers.addEventListener('click', e => {
-    const pos = e.target.dataset.arrpos;
+nextTimers.addEventListener('click', function (e) {
+    var pos = e.target.dataset.arrpos;
     if (e.target.className === 'deleteBtn') {
         timers.splice(pos, 1);
         displayNextTimers();
@@ -145,13 +147,13 @@ nextTimers.addEventListener('click', e => {
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
         timers.reverse();
-        let newTimers = timers.join('+');
+        var newTimers = timers.join('+');
         valuesToArray(newTimers);
         timerStart(timers[timers.length - 1] * 60);
     }
 });
 
-displayArea.addEventListener('click', e => {
+displayArea.addEventListener('click', function (e) {
     if (e.target.tagName === 'BUTTON') {
         valuesToArray(e.target.innerHTML);
         timerStart(timers[timers.length - 1] * 60);
