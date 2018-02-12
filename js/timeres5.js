@@ -140,7 +140,7 @@ nextTimers.addEventListener('click', e => {
     const pos = e.target.dataset.arrpos;
     if (e.target.className === 'deleteBtn') {
         timers.splice(pos, 1);
-        e.target.parentNode.remove();
+        displayNextTimers();
         displayTotalTime(timers);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
