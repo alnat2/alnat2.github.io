@@ -7,7 +7,14 @@ const htmlmin = require('gulp-html-minifier');
 const csso = require('gulp-csso');
 const liveServer = require('live-server');
 
-serverParams = {
+const paths = {
+	watch: {
+		html: 'dev/*.html',
+		js: 'dev/js/*.js',
+		css: 'dev/css/*.css'
+	}
+};
+const serverParams = {
 	port: 4000,
 	watch: 'dev'
 };
@@ -23,16 +30,22 @@ gulp.task("minjs", () =>
 	  .pipe(minify())
 	  .pipe(gulp.dest("./js"))
 	);
-	gulp.task('minhtml', () =>
-		gulp.src('dev/*.html')
-			.pipe(htmlmin({collapseWhitespace: true}))
-			.pipe(gulp.dest('./'))
-	);
-	gulp.task('mincss', () =>
-    gulp.src('dev/css/*.css')
-      .pipe(csso())
-      .pipe(gulp.dest('./css'))
-	);
-gulp.task('watch', () => 
+gulp.task('minhtml', () =>
+	gulp.src('dev/*.html')
+		.pipe(htmlmin({collapseWhitespace: true}))
+		.pipe(gulp.dest('./'))
+);
+gulp.task('mincss', () =>
+	gulp.src('dev/css/*.css')
+		.pipe(csso())
+		.pipe(gulp.dest('./css'))
+);
+gulp.task('watch', () => {
+	gulp.watch(paths.watch.css, ['mincss']);
+	gulp.watch(paths.watch.html, ['minhtml']);
+	gulp.watch(paths.watch.js, ['toes5', 'minjs']);
+});
+gulp.task('reload', () => 
 	liveServer.start(serverParams)
 	);
+gulp.task('default', ['reload', 'watch']);

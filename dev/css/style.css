@@ -9,6 +9,7 @@
 :root {
     box-sizing: border-box;
     font-size: 10px;
+    background-color: #0d47a1;
     --backgroundColor: #0d47a1;
     background-color: var(--backgroundColor);
     --mainColor: #fff;
