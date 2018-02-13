@@ -20,7 +20,7 @@ coverage
 # nyc test coverage
 .nyc_output
 
-build
+dev
 
 # Bower dependency directory (https://bower.io/)
 bower_components
