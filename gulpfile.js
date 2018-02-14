@@ -5,6 +5,8 @@ const rename = require("gulp-rename");
 const minify = require("gulp-babel-minify");
 const htmlmin = require('gulp-html-minifier');
 const csso = require('gulp-csso');
+const plumber = require('gulp-plumber');
+const notify = require("gulp-notify");
 const liveServer = require('live-server');
 
 const paths = {
@@ -21,22 +23,26 @@ const serverParams = {
 
 gulp.task('toes5', () =>
 	gulp.src('dev/js/timer.js')
+		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
         .pipe(rename('dev/js/timeres5.js'))
         .pipe(babel())
 		.pipe(gulp.dest('.'))
 	);
 gulp.task("minjs", () =>
 	gulp.src("dev/js/*.js")
+	  .pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
 	  .pipe(minify())
 	  .pipe(gulp.dest("./js"))
 	);
 gulp.task('minhtml', () =>
 	gulp.src('dev/*.html')
+		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
 		.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest('./'))
 );
 gulp.task('mincss', () =>
 	gulp.src('dev/css/*.css')
+		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
 		.pipe(csso())
 		.pipe(gulp.dest('./css'))
 );

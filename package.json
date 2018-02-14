@@ -17,6 +17,8 @@
     "gulp-babel-minify": "^0.3.0",
     "gulp-csso": "^3.0.1",
     "gulp-html-minifier": "^0.1.8",
+    "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.2.2"
   }
 }
