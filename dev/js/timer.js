@@ -14,13 +14,16 @@ const soundComplete = document.getElementById('complete');
 function countdownOver() {
     soundComplete.play();
 }
-
-function displayTimeLeft(seconds) {
+export function secondsToTimeLeftString(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainderSeconds = seconds % 60;
     const display = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
-    document.title = display;
-    timerDisplay.textContent = display;
+    return display;
+}
+function displayTimeLeft(seconds) {
+    let timeLeft = secondsToTimeLeftString(seconds);
+    document.title = timeLeft;
+    timerDisplay.textContent = timeLeft;
 }
 
 function displayTotalTime(arr) {

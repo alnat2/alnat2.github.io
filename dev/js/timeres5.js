@@ -1,5 +1,9 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.secondsToTimeLeftString = secondsToTimeLeftString;
 /*jshint esversion: 6 */
 var countdown = void 0;
 var secondsLeft = void 0;
@@ -16,13 +20,16 @@ var soundComplete = document.getElementById('complete');
 function countdownOver() {
     soundComplete.play();
 }
-
-function displayTimeLeft(seconds) {
+function secondsToTimeLeftString(seconds) {
     var minutes = Math.floor(seconds / 60);
     var remainderSeconds = seconds % 60;
     var display = minutes + ':' + (remainderSeconds < 10 ? '0' : '') + remainderSeconds;
-    document.title = display;
-    timerDisplay.textContent = display;
+    return display;
+}
+function displayTimeLeft(seconds) {
+    var timeLeft = secondsToTimeLeftString(seconds);
+    document.title = timeLeft;
+    timerDisplay.textContent = timeLeft;
 }
 
 function displayTotalTime(arr) {
