@@ -2,7 +2,7 @@
 let countdown;
 let secondsLeft;
 let timers = [];
-const timersPredefined = ['15+5+15+9+15', '15+15+15', '15+10+15'];
+const timersPredefined = ['15+5+15+9+15', '15+15+15', '15+10+15', '15+10+15+8+15+10+15'];
 const nextTimers = document.getElementById('nextTimers');
 const displayArea = document.getElementById('displayArea');
 const timerInput = document.getElementById('timerInput');

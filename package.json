@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "main": "main.js",
   "scripts": {
-    "test":"mocha"
+    "test":"mocha",
+    "test6":"mocha --compilers js:babel-core/register test/test.js"
   },
   "keywords": [],
   "author": "",
