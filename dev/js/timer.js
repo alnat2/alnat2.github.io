@@ -2,7 +2,11 @@
 let countdown;
 let secondsLeft;
 let timers = [];
-const timersPredefined = ['15+5+15+9+15', '15+15+15', '15+10+15', '15+10+15+8+15+10+15'];
+const timersPredefined = 
+['15+5+15+9+15', 
+'15+15+15',
+'15+10+15', 
+'15+10+15+8+15+10+15'];
 const nextTimers = document.getElementById('nextTimers');
 const displayArea = document.getElementById('displayArea');
 const timerInput = document.getElementById('timerInput');
@@ -25,7 +29,6 @@ function displayTimeLeft(seconds) {
     document.title = timeLeft;
     timerDisplay.textContent = timeLeft;
 }
-
 function displayTotalTime(arr) {
     if (arr.length == 1) {
         timerTotalTime.textContent = '';
@@ -36,7 +39,6 @@ function displayTotalTime(arr) {
     });
     timerTotalTime.textContent = `total timers time is: ${total} ${total == 1 ? 'minute' : "minutes"}`;
 }
-
 function displayTimersPredefined(arr) {
     const insertArea = document.createDocumentFragment();
     for (let i = 0; i < arr.length; i++) {
@@ -47,7 +49,19 @@ function displayTimersPredefined(arr) {
     }
     displayArea.appendChild(insertArea);
 }
-
+function displayTimersPredefinedSelect(arr) {
+    const insertArea = document.createDocumentFragment();
+    const insertSelect = document.createElement('select');
+    insertSelect.setAttribute('id', 'predefinedSelect');
+    for (let i = 0; i < arr.length; i++) {
+        const insertElement = document.createElement('option');
+        insertElement.className = "display__time-predefined";
+        insertElement.innerHTML = timersPredefined[i];
+        insertSelect.appendChild(insertElement);
+    }
+    insertArea.appendChild(insertSelect);
+    displayArea.appendChild(insertArea);
+}
 function displayNextTimers() {
     if (nextTimers.hasChildNodes()) {
         nextTimers.innerHTML = '';
@@ -76,7 +90,6 @@ function displayNextTimers() {
     }
     nextTimers.appendChild(insertArea);
 }
-
 function valuesToArray(timerSet) {
     let minutes;
     if (timerSet.value) {
@@ -88,7 +101,6 @@ function valuesToArray(timerSet) {
     timers = minutes.split('+');
     timers.reverse();
 }
-
 function timer(seconds) {
     clearInterval(countdown);
     displayNextTimers();
@@ -112,12 +124,10 @@ function timer(seconds) {
         displayTimeLeft(secondsLeft);
     }, 1000);
 }
-
 function timerStart(duration) {
     timer(duration);
     timerRunButton.textContent = '⏸';
 }
-
 function timersRun() {
     if (timerInput.value) {
         valuesToArray(timerInput);
@@ -126,7 +136,6 @@ function timersRun() {
         timerPauseResume();
     }
 }
-
 function timerPauseResume() {
     if (!countdown) return;
     if (timerRunButton.textContent === '⏸') {
@@ -137,7 +146,16 @@ function timerPauseResume() {
     }
 }
 
-displayTimersPredefined(timersPredefined);
+if (timersPredefined.length > 3) {
+    displayTimersPredefinedSelect(timersPredefined);
+    const predefinedSelect = document.getElementById('predefinedSelect');
+    predefinedSelect.addEventListener('click', e => {
+        valuesToArray(e.target.selectedOptions[0].innerHTML);
+        timerStart(timers[timers.length - 1] * 60);
+    });
+} else{
+    displayTimersPredefined(timersPredefined);
+}
 
 nextTimers.addEventListener('click', e => {
     const pos = e.target.dataset.arrpos;
@@ -153,7 +171,6 @@ nextTimers.addEventListener('click', e => {
         timerStart(timers[timers.length - 1] * 60);
     }
 });
-
 displayArea.addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON') {
         valuesToArray(e.target.innerHTML);

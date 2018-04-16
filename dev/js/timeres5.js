@@ -31,7 +31,6 @@ function displayTimeLeft(seconds) {
     document.title = timeLeft;
     timerDisplay.textContent = timeLeft;
 }
-
 function displayTotalTime(arr) {
     if (arr.length == 1) {
         timerTotalTime.textContent = '';
@@ -42,7 +41,6 @@ function displayTotalTime(arr) {
     });
     timerTotalTime.textContent = 'total timers time is: ' + total + ' ' + (total == 1 ? 'minute' : "minutes");
 }
-
 function displayTimersPredefined(arr) {
     var insertArea = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) {
@@ -53,7 +51,19 @@ function displayTimersPredefined(arr) {
     }
     displayArea.appendChild(insertArea);
 }
-
+function displayTimersPredefinedSelect(arr) {
+    var insertArea = document.createDocumentFragment();
+    var insertSelect = document.createElement('select');
+    insertSelect.setAttribute('id', 'predefinedSelect');
+    for (var i = 0; i < arr.length; i++) {
+        var insertElement = document.createElement('option');
+        insertElement.className = "display__time-predefined";
+        insertElement.innerHTML = timersPredefined[i];
+        insertSelect.appendChild(insertElement);
+    }
+    insertArea.appendChild(insertSelect);
+    displayArea.appendChild(insertArea);
+}
 function displayNextTimers() {
     if (nextTimers.hasChildNodes()) {
         nextTimers.innerHTML = '';
@@ -82,7 +92,6 @@ function displayNextTimers() {
     }
     nextTimers.appendChild(insertArea);
 }
-
 function valuesToArray(timerSet) {
     var minutes = void 0;
     if (timerSet.value) {
@@ -94,7 +103,6 @@ function valuesToArray(timerSet) {
     timers = minutes.split('+');
     timers.reverse();
 }
-
 function timer(seconds) {
     clearInterval(countdown);
     displayNextTimers();
@@ -118,12 +126,10 @@ function timer(seconds) {
         displayTimeLeft(secondsLeft);
     }, 1000);
 }
-
 function timerStart(duration) {
     timer(duration);
     timerRunButton.textContent = '⏸';
 }
-
 function timersRun() {
     if (timerInput.value) {
         valuesToArray(timerInput);
@@ -132,7 +138,6 @@ function timersRun() {
         timerPauseResume();
     }
 }
-
 function timerPauseResume() {
     if (!countdown) return;
     if (timerRunButton.textContent === '⏸') {
@@ -143,7 +148,16 @@ function timerPauseResume() {
     }
 }
 
-displayTimersPredefined(timersPredefined);
+if (timersPredefined.length > 3) {
+    displayTimersPredefinedSelect(timersPredefined);
+    var predefinedSelect = document.getElementById('predefinedSelect');
+    predefinedSelect.addEventListener('click', function (e) {
+        valuesToArray(e.target.selectedOptions[0].innerHTML);
+        timerStart(timers[timers.length - 1] * 60);
+    });
+} else {
+    displayTimersPredefined(timersPredefined);
+}
 
 nextTimers.addEventListener('click', function (e) {
     var pos = e.target.dataset.arrpos;
@@ -159,7 +173,6 @@ nextTimers.addEventListener('click', function (e) {
         timerStart(timers[timers.length - 1] * 60);
     }
 });
-
 displayArea.addEventListener('click', function (e) {
     if (e.target.tagName === 'BUTTON') {
         valuesToArray(e.target.innerHTML);
