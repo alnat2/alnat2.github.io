@@ -1,9 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.secondsToTimeLeftString = secondsToTimeLeftString;
 /*jshint esversion: 6 */
 var countdown = void 0;
 var secondsLeft = void 0;
@@ -46,7 +42,7 @@ function displayTimersPredefined(arr) {
     for (var i = 0; i < arr.length; i++) {
         var insertElement = document.createElement('button');
         insertElement.className = "display__time-predefined";
-        insertElement.innerHTML = timersPredefined[i];
+        insertElement.innerHTML = arr[i];
         insertArea.appendChild(insertElement);
     }
     displayArea.appendChild(insertArea);
@@ -58,7 +54,7 @@ function displayTimersPredefinedSelect(arr) {
     for (var i = 0; i < arr.length; i++) {
         var insertElement = document.createElement('option');
         insertElement.className = "display__time-predefined";
-        insertElement.innerHTML = timersPredefined[i];
+        insertElement.innerHTML = arr[i];
         insertSelect.appendChild(insertElement);
     }
     insertArea.appendChild(insertSelect);
@@ -73,24 +69,25 @@ function displayNextTimers() {
         insertCurrentElement.className = "nextTimers__item";
         insertCurrentElement.innerHTML = 'No more timers';
         nextTimers.appendChild(insertCurrentElement);
+    } else {
+        var insertArea = document.createDocumentFragment();
+        for (var i = timers.length - 2; i >= 0; i--) {
+            var _insertCurrentElement = document.createElement("li");
+            var startBtn = document.createElement('button');
+            startBtn.className = "startBtn";
+            startBtn.setAttribute("data-arrPos", i + 1 - timers.length);
+            startBtn.innerHTML = timers[i];
+            var deleteBtn = document.createElement('button');
+            deleteBtn.className = "deleteBtn";
+            deleteBtn.setAttribute("data-arrPos", i - timers.length);
+            deleteBtn.innerHTML = "delete";
+            _insertCurrentElement.className = "nextTimers__item";
+            _insertCurrentElement.appendChild(startBtn);
+            _insertCurrentElement.appendChild(deleteBtn);
+            insertArea.appendChild(_insertCurrentElement);
+        }
+        nextTimers.appendChild(insertArea);
     }
-    var insertArea = document.createDocumentFragment();
-    for (var i = timers.length - 2; i >= 0; i--) {
-        var _insertCurrentElement = document.createElement("li");
-        var startBtn = document.createElement('button');
-        startBtn.className = "startBtn";
-        startBtn.setAttribute("data-arrPos", i + 1 - timers.length);
-        startBtn.innerHTML = timers[i];
-        var deleteBtn = document.createElement('button');
-        deleteBtn.className = "deleteBtn";
-        deleteBtn.setAttribute("data-arrPos", i - timers.length);
-        deleteBtn.innerHTML = "delete";
-        _insertCurrentElement.className = "nextTimers__item";
-        _insertCurrentElement.appendChild(startBtn);
-        _insertCurrentElement.appendChild(deleteBtn);
-        insertArea.appendChild(_insertCurrentElement);
-    }
-    nextTimers.appendChild(insertArea);
 }
 function valuesToArray(timerSet) {
     var minutes = void 0;
@@ -157,8 +154,22 @@ if (timersPredefined.length > 3) {
     });
 } else {
     displayTimersPredefined(timersPredefined);
+    displayArea.addEventListener('click', function (e) {
+        if (e.target.tagName === 'BUTTON') {
+            valuesToArray(e.target.innerHTML);
+            timerStart(timers[timers.length - 1] * 60);
+        }
+    });
 }
 
+timerRunButton.addEventListener('click', timersRun);
+
+timerInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        timersRun();
+    }
+});
 nextTimers.addEventListener('click', function (e) {
     var pos = e.target.dataset.arrpos;
     if (e.target.className === 'deleteBtn') {
@@ -171,20 +182,5 @@ nextTimers.addEventListener('click', function (e) {
         var newTimers = timers.join('+');
         valuesToArray(newTimers);
         timerStart(timers[timers.length - 1] * 60);
-    }
-});
-displayArea.addEventListener('click', function (e) {
-    if (e.target.tagName === 'BUTTON') {
-        valuesToArray(e.target.innerHTML);
-        timerStart(timers[timers.length - 1] * 60);
-    }
-});
-
-timerRunButton.addEventListener('click', timersRun);
-
-timerInput.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        timersRun();
     }
 });
