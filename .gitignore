@@ -54,5 +54,6 @@ typings/
 # dotenv environment variables file
 .env
 
+test/
 sync-prod.sh
 
