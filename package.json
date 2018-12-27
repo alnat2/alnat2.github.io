@@ -3,23 +3,24 @@
   "version": "0.2.0",
   "main": "main.js",
   "scripts": {
-    "test":"mocha",
-    "test6":"mocha --compilers js:babel-core/register test/test.js"
+    "test": "mocha",
+    "test6": "mocha --compilers js:babel-core/register test/test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.1",
-    "gulp-babel-minify": "^0.3.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-babel-minify": "^0.5.0",
     "gulp-csso": "^3.0.1",
     "gulp-html-minifier": "^0.1.8",
     "gulp-notify": "^3.2.0",
-    "gulp-plumber": "^1.2.0",
-    "gulp-rename": "^1.2.2"
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^1.4.0",
+    "live-server": "^1.2.1"
   }
 }

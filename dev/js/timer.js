@@ -4,9 +4,9 @@ let secondsLeft;
 let timers = [];
 const timersPredefined = 
 ['15+5+15+9+15', 
-'15+15+15',
+'15*3',
 '15+10+15', 
-'15+10+15+8+15+10+15'];
+'15+11+15+10+15+8+15'];
 const nextTimers = document.getElementById('nextTimers');
 const displayArea = document.getElementById('displayArea');
 const timerInput = document.getElementById('timerInput');
@@ -99,7 +99,25 @@ function valuesToArray(timerSet) {
     } else {
         minutes = timerSet;
     }
-    timers = minutes.split('+');
+    minutes.split('+').forEach((i) => {
+      if (i.includes('*')) {
+        let tempArr = i.split('*');
+        let mul = 1;
+        if (tempArr.length >= 3) {
+          for (let i = 1; i < tempArr.length; i++) {
+            mul *= parseInt(tempArr[i]);
+          }
+        } else {
+           mul = parseInt(tempArr[1]);
+        }
+        while (mul) {
+               timers.push(tempArr[0]);
+          mul --;
+               }
+      } else {
+        timers.push(i);
+      }
+      })
     timers.reverse();
 }
 function timer(seconds) {
