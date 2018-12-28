@@ -20,38 +20,57 @@ const serverParams = {
 	port: 4000,
 	watch: 'dev'
 };
+// function toes5() {
+// 	return gulp
+// 		.src('dev/js/timer.js')
+// 		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
+//         .pipe(rename('dev/js/timeres5.js'))
+//         .pipe(babel({
+// 			presets: ['@babel/env']
+// 		}))
+// 		.pipe(gulp.dest('.'))
+// }
 
-gulp.task('toes5', () =>
-	gulp.src('dev/js/timer.js')
-		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
-        .pipe(rename('dev/js/timeres5.js'))
-        .pipe(babel())
-		.pipe(gulp.dest('.'))
-	);
-gulp.task("minjs", () =>
-	gulp.src("dev/js/*.js")
+function minjs() {
+	return gulp
+	  .src("dev/js/*.js")
 	  .pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
-	  .pipe(minify())
+	  .pipe(minify({
+		builtIns: false
+	  }))
 	  .pipe(gulp.dest("./js"))
-	);
-gulp.task('minhtml', () =>
-	gulp.src('dev/*.html')
-		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
-		.pipe(htmlmin({collapseWhitespace: true}))
-		.pipe(gulp.dest('./'))
-);
-gulp.task('mincss', () =>
-	gulp.src('dev/css/*.css')
+}
+
+function minhtml() {
+	return gulp
+	.src('dev/*.html')
+	.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
+	.pipe(htmlmin({collapseWhitespace: true}))
+	.pipe(gulp.dest('./'))
+}
+
+function mincss() {
+	return gulp
+		.src('dev/css/*.css')
 		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
 		.pipe(csso())
 		.pipe(gulp.dest('./css'))
-);
-gulp.task('watch', () => {
-	gulp.watch(paths.watch.css, ['mincss']);
-	gulp.watch(paths.watch.html, ['minhtml']);
-	gulp.watch(paths.watch.js, ['toes5', 'minjs']);
-});
-gulp.task('reload', () => 
-	liveServer.start(serverParams)
-	);
-gulp.task('default', ['reload', 'watch']);
+}
+
+function watchFiles() {
+	gulp.watch(paths.watch.css, mincss);
+	gulp.watch(paths.watch.html, minhtml);
+	gulp.watch(paths.watch.js, minjs);
+	// gulp.watch(paths.watch.js, gulp.series(toes5, minjs));
+  }
+// 
+function liveServerStart(done) {
+	liveServer.start(serverParams);
+	done();
+  }
+// gulp.task('reload', () => 
+// 	liveServer.start(serverParams)
+// 	);
+// gulp.task("watch", gulp.parallel(watchFiles, liveServerStart));
+gulp.task('default', gulp.parallel(watchFiles, liveServerStart));
+// gulp.task('default', ['reload', 'watch']);
