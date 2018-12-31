@@ -64,13 +64,9 @@ function watchFiles() {
 	// gulp.watch(paths.watch.js, gulp.series(toes5, minjs));
   }
 // 
-function liveServerStart(done) {
+function liveServerStart() {
 	liveServer.start(serverParams);
-	done();
+	// done();
   }
-// gulp.task('reload', () => 
-// 	liveServer.start(serverParams)
-// 	);
-// gulp.task("watch", gulp.parallel(watchFiles, liveServerStart));
 gulp.task('default', gulp.parallel(watchFiles, liveServerStart));
 // gulp.task('default', ['reload', 'watch']);

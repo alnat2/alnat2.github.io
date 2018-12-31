@@ -3,10 +3,10 @@ let countdown;
 let secondsLeft;
 let timers = [];
 const timersPredefined = 
-['15+5+15+9+15', 
-'15*3',
-'15+10+15', 
-'15+11+15+10+15+8+15'];
+['15+5+15+9+15',
+ '15*3',
+ '15+10+15',
+ '15+11+15+10+15+8+15'];
 const nextTimers = document.getElementById('nextTimers');
 const displayArea = document.getElementById('displayArea');
 const timerInput = document.getElementById('timerInput');
@@ -91,15 +91,20 @@ function displayNextTimers() {
         nextTimers.appendChild(insertArea);
     }
 }
-function valuesToArray(timerSet) {
-    let minutes;
-    if (timerSet.value) {
-        minutes = timerSet.value;
-        timerSet.value = '';
-    } else {
-        minutes = timerSet;
+function inputValidate(input) {
+    let minutes, symbol;
+    minutes = input.value;
+    let unaccept = minutes.match(/[^\d\+\*\.]+/g);
+    if (unaccept !== null) {
+        displayArea.children[2].innerHTML = `${unaccept.join(' ')} ${symbol = unaccept.length == 1 ? 'unacceptable symbol' : 'unacceptable symbols'}`;
+        return;
     }
-    minutes.split('+').forEach((i) => {
+    input.value = '';
+    return minutes;
+}
+function valuesToArray(str) {
+    if (!str) return;
+    str.split('+').forEach((i) => {
       if (i.includes('*')) {
         let tempArr = i.split('*');
         let mul = 1;
@@ -149,7 +154,8 @@ function timerStart(duration) {
 }
 function timersRun() {
     if (timerInput.value) {
-        valuesToArray(timerInput);
+        valuesToArray(inputValidate(timerInput));
+        if (timers === undefined || timers.length == 0) return;
         timerStart(timers[timers.length - 1] * 60);
     } else {
         timerPauseResume();
