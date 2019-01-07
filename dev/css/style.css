@@ -1,12 +1,4 @@
 @font-face {
-    font-family: 'Inconsolata';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Inconsolata Regular'), local('Inconsolata-Regular'),
-         url('../fonts/inconsolata-v16-latin-regular.woff2') format('woff2'),
-         url('../fonts/inconsolata-v16-latin-regular.woff') format('woff');
-  }
-  @font-face {
       font-family: 'Symbola';
       font-style: normal;
       font-weight: 400;
@@ -33,7 +25,7 @@
       color: var(--mainColor);
       margin: 0;
       text-align: center;
-      font-family: 'Inconsolata', monospace;
+      font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", monospace;
   }
   
   .displayTimeLeft {
@@ -81,17 +73,16 @@
       border: 2px solid;
       margin: 1rem auto;
       padding: 10px;
+      font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", monospace;
       font-size: 2rem;
       text-transform: uppercase;
       text-align-last:center;
       display: inline-block;
       width: 90%;
   }
-  
-  .pause {
-      font-family: Symbola, serif;
+  .timer .plp {
+    font-family: Symbola, serif;
   }
-  
   .timer input:focus,
   .timer button:focus,
   .timer select:focus {
