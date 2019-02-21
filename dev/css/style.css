@@ -8,11 +8,11 @@
 	font-size: calc( 15px + (20 - 15) * ((100vw - 320px) / ( 1400 - 320)));
       -webkit-box-sizing: border-box;
               box-sizing: border-box;
-      /* font-size: 10px; */
-      background-color:maroon;
+      --focusColor: #cdd210;
       --backgroundColor: #0d47a1;
-      background-color: var(--backgroundColor);
       --mainColor: #fff;
+      background-color: var(--backgroundColor);
+      
   }
   
   *,
@@ -44,7 +44,7 @@
   .timer {
       margin: 0.5rem auto;
       max-width: 400px;
-      border:aliceblue solid 2px;
+      border: solid 2px;
   }
   
   .timer input::-webkit-input-placeholder {
@@ -87,7 +87,7 @@
   .timer input:focus,
   .timer button:focus,
   .timer select:focus {
-      border: 2px solid #cdd210;
+      border: 2px solid var(--focusColor);
       outline: 0;
   }
   .nextTimersArea {
