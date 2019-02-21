@@ -1,1 +1,260 @@
-var countdown,secondsLeft,timers=[],timersPredefined=["15+5+15+9+15","15*3","15+10+15","15+11+15+10+15+8+15"],nextTimers=document.getElementById("nextTimers"),displayArea=document.getElementById("displayArea"),timerInput=document.getElementById("timerInput"),timerRunButton=document.getElementById("timerRun"),timerDisplay=document.querySelector(".displayTimeLeft"),timerTotalTime=document.querySelector(".displayTimeTotal"),soundComplete=document.getElementById("complete");function countdownOver(){soundComplete.play()}function secondsToTimeLeftString(a){var b=Math.floor(a/60),c=a%60,d="".concat(b,":").concat(10>c?"0":"").concat(c);return d}function displayTimeLeft(a){var b=secondsToTimeLeftString(a);document.title=b,timerDisplay.textContent=b}function displayTotalTime(a){if(1==a.length)return void(timerTotalTime.textContent="");var b=a.reduce(function(b,a){return parseInt(b)+parseInt(a)});timerTotalTime.textContent="total timers time is: ".concat(b," ").concat(1==b?"minute":"minutes")}function displayTimersPredefined(a){for(var b,c=document.createDocumentFragment(),d=0;d<a.length;d++)b=document.createElement("button"),b.className="display__time-predefined",b.innerHTML=a[d],c.appendChild(b);displayArea.appendChild(c)}function displayTimersPredefinedSelect(a){var b=document.createDocumentFragment(),c=document.createElement("select");c.setAttribute("id","predefinedSelect");for(var d,e=0;e<a.length;e++)d=document.createElement("option"),d.className="display__time-predefined",d.innerHTML=a[e],c.appendChild(d);b.appendChild(c),displayArea.appendChild(b)}function displayNextTimers(){if(nextTimers.hasChildNodes()&&(nextTimers.innerHTML=""),1==timers.length){var a=document.createElement("li");a.className="nextTimers__item",a.innerHTML="No more timers",nextTimers.appendChild(a)}else{for(var b=document.createDocumentFragment(),c=timers.length-2;0<=c;c--){var d=document.createElement("li"),e=document.createElement("button");e.className="startBtn",e.setAttribute("data-arrPos",c+1-timers.length),e.innerHTML=timers[c];var f=document.createElement("button");f.className="deleteBtn",f.setAttribute("data-arrPos",c-timers.length),f.innerHTML="delete",d.className="nextTimers__item",d.appendChild(e),d.appendChild(f),b.appendChild(d)}nextTimers.appendChild(b)}}function inputValidate(a){var b,c;b=a.value;var d=b.match(/[^\d\+\*\.]+/g);return null===d?(a.value="",b):void(displayArea.children[2].innerHTML="".concat(d.join(" ")," ").concat(c=1==d.length?"unacceptable symbol":"unacceptable symbols"))}function valuesToArray(a){a&&(a.split("+").forEach(function(a){if(a.includes("*")){var b=a.split("*"),c=1;if(3<=b.length)for(var d=1;d<b.length;d++)c*=parseInt(b[d]);else c=parseInt(b[1]);for(;c;)timers.push(b[0]),c--}else timers.push(a)}),timers.reverse())}function timer(a){clearInterval(countdown),displayNextTimers(),displayTotalTime(timers);var b=Date.now();displayTimeLeft(a),countdown=setInterval(function(){return secondsLeft=Math.round((b+1e3*a-Date.now())/1e3),0>secondsLeft?(countdownOver(),timers.pop(),clearInterval(countdown),void(0<timers.length?timer(60*timers[timers.length-1]):timerRunButton.textContent="\u25B6")):void displayTimeLeft(secondsLeft)},1e3)}function timerStart(a){timer(a),timerRunButton.textContent="\u23F8"}function timersRun(){if(timerInput.value){if(valuesToArray(inputValidate(timerInput)),void 0===timers||0==timers.length)return;timerStart(60*timers[timers.length-1])}else timerPauseResume()}function timerPauseResume(){countdown&&("\u23F8"===timerRunButton.textContent?(timerRunButton.textContent="\u25B6",clearInterval(countdown)):timerStart(secondsLeft))}if(3<timersPredefined.length){displayTimersPredefinedSelect(timersPredefined);var predefinedSelect=document.getElementById("predefinedSelect");predefinedSelect.addEventListener("click",function(a){a.currentTarget===a.target||(valuesToArray(a.currentTarget.selectedOptions[0].innerHTML),timerStart(60*timers[timers.length-1]))})}else displayTimersPredefined(timersPredefined),displayArea.addEventListener("click",function(a){"BUTTON"===a.target.tagName&&(valuesToArray(a.target.innerHTML),timerStart(60*timers[timers.length-1]))});timerRunButton.addEventListener("click",timersRun),timerInput.addEventListener("keypress",function(a){"Enter"===a.key&&(a.preventDefault(),timersRun())}),nextTimers.addEventListener("click",function(a){var b=a.target.dataset.arrpos;if("deleteBtn"===a.target.className)timers.splice(b,1),displayNextTimers(),displayTotalTime(timers);else if("startBtn"===a.target.className){timers.splice(b),timers.reverse();var c=timers.join("+");valuesToArray(c),timerStart(60*timers[timers.length-1])}});
+var countdown;
+var secondsLeft;
+var timers = [];
+var timersPredefined = [
+  "15+5+15+9+15",
+  "15*3",
+  "15+10+15",
+  "15+11+15+10+15+8+15"
+];
+var nextTimers = document.getElementById("nextTimers");
+var displayArea = document.getElementById("displayArea");
+var timerInput = document.getElementById("timerInput");
+var timerRunButton = document.getElementById("timerRun");
+var timerDisplay = document.querySelector(".displayTimeLeft");
+var timerTotalTime = document.querySelector(".displayTimeTotal");
+var soundComplete = document.getElementById("complete");
+
+function countdownOver() {
+  soundComplete.play();
+}
+
+function secondsToTimeLeftString(seconds) {
+  var minutes = Math.floor(seconds / 60);
+  var remainderSeconds = seconds % 60;
+  var display = ""
+    .concat(minutes, ":")
+    .concat(remainderSeconds < 10 ? "0" : "")
+    .concat(remainderSeconds);
+  return display;
+}
+
+function displayTimeLeft(seconds) {
+  var timeLeft = secondsToTimeLeftString(seconds);
+  document.title = timeLeft;
+  timerDisplay.textContent = timeLeft;
+}
+
+function displayTotalTime(arr) {
+  if (arr.length == 1) {
+    timerTotalTime.textContent = "";
+    return;
+  }
+
+  var total = arr.reduce(function(a, v) {
+    return parseInt(a) + parseInt(v);
+  });
+  timerTotalTime.textContent = "total timers time is: "
+    .concat(total, " ")
+    .concat(total == 1 ? "minute" : "minutes");
+}
+
+function displayTimersPredefined(arr) {
+  var insertArea = document.createDocumentFragment();
+
+  for (var i = 0; i < arr.length; i++) {
+    var insertElement = document.createElement("button");
+    insertElement.className = "display__time-predefined";
+    insertElement.innerHTML = arr[i];
+    insertArea.appendChild(insertElement);
+  }
+
+  displayArea.appendChild(insertArea);
+}
+
+function displayTimersPredefinedSelect(arr) {
+  var insertArea = document.createDocumentFragment();
+  var insertSelect = document.createElement("select");
+  insertSelect.setAttribute("id", "predefinedSelect");
+  var insertElement = document.createElement("option");
+    insertElement.className = "display__time-predefined";
+    insertElement.innerHTML = "timers";
+    insertSelect.appendChild(insertElement);
+
+  for (var i = 0; i < arr.length; i++) {
+    insertElement = document.createElement("option");
+    insertElement.className = "display__time-predefined";
+    insertElement.innerHTML = arr[i];
+    insertSelect.appendChild(insertElement);
+  }
+
+  insertArea.appendChild(insertSelect);
+  displayArea.appendChild(insertArea);
+}
+
+function displayNextTimers() {
+  if (nextTimers.hasChildNodes()) {
+    nextTimers.innerHTML = "";
+  }
+
+  if (timers.length == 1) {
+    var insertCurrentElement = document.createElement("li");
+    insertCurrentElement.className = "nextTimers__item";
+    insertCurrentElement.innerHTML = "No more timers";
+    nextTimers.appendChild(insertCurrentElement);
+  } else {
+    var insertArea = document.createDocumentFragment();
+
+    for (var i = timers.length - 2; i >= 0; i--) {
+      var _insertCurrentElement = document.createElement("li");
+
+      var startBtn = document.createElement("button");
+      startBtn.className = "startBtn";
+      startBtn.setAttribute("data-arrPos", i + 1 - timers.length);
+      startBtn.innerHTML = timers[i];
+      var deleteBtn = document.createElement("button");
+      deleteBtn.className = "deleteBtn";
+      deleteBtn.setAttribute("data-arrPos", i - timers.length);
+      deleteBtn.innerHTML = "delete";
+      _insertCurrentElement.className = "nextTimers__item";
+
+      _insertCurrentElement.appendChild(startBtn);
+
+      _insertCurrentElement.appendChild(deleteBtn);
+
+      insertArea.appendChild(_insertCurrentElement);
+    }
+
+    nextTimers.appendChild(insertArea);
+  }
+}
+
+function inputValidate(input) {
+  var minutes, symbol;
+  minutes = input.value;
+  var unaccept = minutes.match(/[^\d\+\*\.]+/g);
+
+  if (unaccept !== null) {
+    displayArea.children[2].innerHTML = ""
+      .concat(unaccept.join(" "), " ")
+      .concat(
+        (symbol =
+          unaccept.length == 1 ? "unacceptable symbol" : "unacceptable symbols")
+      );
+    return;
+  }
+
+  input.value = "";
+  return minutes;
+}
+
+function valuesToArray(str) {
+  if (!str) return;
+  str.split("+").forEach(function(i) {
+    if (i.includes("*")) {
+      var tempArr = i.split("*");
+      var mul = 1;
+
+      if (tempArr.length >= 3) {
+        for (var _i = 1; _i < tempArr.length; _i++) {
+          mul *= parseInt(tempArr[_i]);
+        }
+      } else {
+        mul = parseInt(tempArr[1]);
+      }
+
+      while (mul) {
+        timers.push(tempArr[0]);
+        mul--;
+      }
+    } else {
+      timers.push(i);
+    }
+  });
+  timers.reverse();
+}
+
+function timer(seconds) {
+  clearInterval(countdown);
+  displayNextTimers();
+  displayTotalTime(timers);
+  var now = Date.now();
+  var then = now + seconds * 1000;
+  displayTimeLeft(seconds);
+  countdown = setInterval(function() {
+    secondsLeft = Math.round((then - Date.now()) / 1000);
+
+    if (secondsLeft < 0) {
+      countdownOver();
+      timers.pop();
+      clearInterval(countdown);
+
+      if (timers.length > 0) {
+        timer(timers[timers.length - 1] * 60);
+      } else {
+        timerRunButton.textContent = "▶";
+      }
+
+      return;
+    }
+
+    displayTimeLeft(secondsLeft);
+  }, 1000);
+}
+
+function timerStart(duration) {
+  timer(duration);
+  timerRunButton.textContent = "⏸";
+}
+
+function timersRun() {
+  if (timerInput.value) {
+    valuesToArray(inputValidate(timerInput));
+    if (timers === undefined || timers.length == 0) return;
+    timerStart(timers[timers.length - 1] * 60);
+  } else {
+    timerPauseResume();
+  }
+}
+
+function timerPauseResume() {
+  if (!countdown) return;
+
+  if (timerRunButton.textContent === "⏸") {
+    timerRunButton.textContent = "▶";
+    clearInterval(countdown);
+  } else {
+    timerStart(secondsLeft);
+  }
+}
+
+if (timersPredefined.length > 3) {
+  displayTimersPredefinedSelect(timersPredefined);
+  var predefinedSelect = document.getElementById("predefinedSelect");
+  predefinedSelect.addEventListener("change", function(e) {
+      if (e.target.selectedIndex == "0") return;
+    valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
+    timerStart(timers[timers.length - 1] * 60);
+  });
+} else {
+  displayTimersPredefined(timersPredefined);
+  displayArea.addEventListener("click", function(e) {
+    if (e.target.tagName === "BUTTON") {
+      valuesToArray(e.target.innerHTML);
+      timerStart(timers[timers.length - 1] * 60);
+    }
+  });
+}
+
+timerRunButton.addEventListener("click", timersRun);
+timerInput.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    timersRun();
+  }
+});
+nextTimers.addEventListener("click", function(e) {
+  var pos = e.target.dataset.arrpos;
+
+  if (e.target.className === "deleteBtn") {
+    timers.splice(pos, 1);
+    displayNextTimers();
+    displayTotalTime(timers);
+  } else if (e.target.className === "startBtn") {
+    timers.splice(pos);
+    timers.reverse();
+    var newTimers = timers.join("+");
+    valuesToArray(newTimers);
+    timerStart(timers[timers.length - 1] * 60);
+  }
+});
