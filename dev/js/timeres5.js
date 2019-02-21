@@ -218,7 +218,8 @@ if (timersPredefined.length > 3) {
   displayTimersPredefinedSelect(timersPredefined);
   var predefinedSelect = document.getElementById("predefinedSelect");
   predefinedSelect.addEventListener("click", function(e) {
-    valuesToArray(e.target.selectedOptions[0].innerHTML);
+    if (e.currentTarget === e.target) return;
+    valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
     timerStart(timers[timers.length - 1] * 60);
   });
 } else {

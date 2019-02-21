@@ -175,7 +175,8 @@ if (timersPredefined.length > 3) {
     displayTimersPredefinedSelect(timersPredefined);
     const predefinedSelect = document.getElementById('predefinedSelect');
     predefinedSelect.addEventListener('click', e => {
-        valuesToArray(e.target.selectedOptions[0].innerHTML);
+        if (e.currentTarget === e.target) return;
+        valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
         timerStart(timers[timers.length - 1] * 60);
     });
 } else{
