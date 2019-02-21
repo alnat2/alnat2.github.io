@@ -1,13 +1,13 @@
 /*jshint esversion: 6 */
 const gulp = require('gulp');
-const babel = require('gulp-babel');
-const rename = require("gulp-rename");
+//const babel = require('gulp-babel');
+//const rename = require("gulp-rename");
 const minify = require("gulp-babel-minify");
 const htmlmin = require('gulp-html-minifier');
 const csso = require('gulp-csso');
 const plumber = require('gulp-plumber');
 const notify = require("gulp-notify");
-const liveServer = require('live-server');
+//const liveServer = require('live-server');
 
 const paths = {
 	watch: {
@@ -64,9 +64,10 @@ function watchFiles() {
 	// gulp.watch(paths.watch.js, gulp.series(toes5, minjs));
   }
 // 
-function liveServerStart() {
-	liveServer.start(serverParams);
-	// done();
-  }
-gulp.task('default', gulp.parallel(watchFiles, liveServerStart));
+
+//function liveServerStart() {
+	//liveServer.start(serverParams);
+	//done();
+  //}
+gulp.task('default', gulp.parallel(watchFiles));
 // gulp.task('default', ['reload', 'watch']);

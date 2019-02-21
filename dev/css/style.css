@@ -5,10 +5,11 @@
       src: url(data:font/ttf;base64,AAEAAAANAIAAAwBQR0RFRgAQAAMAAALcAAAAFkdQT1NEdkx1AAAC9AAAACBHU1VCAKz2lgAAAxQAAAA8T1MvMtbm0gwAAAG0AAAAYGNtYXAnlbZ8AAACFAAAAGxnbHlm+OlkPAAAANwAAABIaGVhZB2EwaMAAAFMAAAANmhoZWEYpRFIAAABkAAAACRobXR4EMACrQAAAYQAAAAMbG9jYQAWACQAAAFEAAAACG1heHABsQ8XAAABJAAAACBuYW1lAw8LAQAAAoAAAAA6cG9zdP3TAEYAAAK8AAAAIAACAbj/oAS4BKAAAwAHAAAFIREhASERIQS4/wABAP4A/wABAGAFAPsABQAAAAEAdf9hBRwFKwACAAAJAREFHPtZAkb9GwXKAAABAAAAAw5lAaUAsAAFAAAAAAAAAAAAAAAAAAAAAwACAAAAAAAWACQAAQAAAAo9ccNVZ05fDzz1AAAIAAAAAADWlqn4AAAAANaWkJD5Sv1EF/AHaAAAAAkAAgAAAAAAAAUEAIAGcAG4BUwAdQABAAAHaP1EAAAYAPlK/AAX8AABAAAAAAAAAAAAAAAAAAAAAwAEBcwBkAAEAAAGKwV+AAABDQYrBX4AAAJDAFAB9AEFAgIFAwYIBQICBAAAAAAAACCAAAAAAAAAAABGcmVlAEAj+CW2B2j9RAAAB2gCvGAAAZ/f1wAAA5sFQgAAACAABgAAAAMAAAAAAAAAHAADAAEAAAAcAAMACgAAAEQABAAoAAAABgAEAAEAAiP4Jbb//wAAI/gltv//3AnaTAABAAAAAAAAAAwAAAAAACgAAAAAAAAAAgAAI/gAACP4AAAAAQAAJbYAACW2AAAAAgAAAAIAHgADAAEECQABAA4AAAADAAEECQACAA4ADgBTAHkAbQBiAG8AbABhAFIAZQBnAHUAbABhAHIAAAADAAAAAAAA/dAARgAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAMAAAAAAAAAAIAAQAAAAIAAQAAAAEAAAAKABwAHgABREZMVAAIAAQAAAAA//8AAAAAAAAAAQAAAAoAOAA6AAVERkxUACBjeXJsACpncmVrACpsYXRuACptYXRoACoABAAAAAD//wAAAAAAAAAAAAA=) format('truetype')
     }
   :root {
+	font-size: calc( 15px + (20 - 15) * ((100vw - 320px) / ( 1400 - 320)));
       -webkit-box-sizing: border-box;
               box-sizing: border-box;
-      font-size: 10px;
-      background-color: #0d47a1;
+      /* font-size: 10px; */
+      background-color:maroon;
       --backgroundColor: #0d47a1;
       background-color: var(--backgroundColor);
       --mainColor: #fff;
@@ -29,20 +30,20 @@
   }
   
   .displayTimeLeft {
-      font-size: 12rem;
+      font-size: 6rem;
   }
   
   .displayTimeTotal {
-      font-size: 2.5rem;
+      font-size: 1.25rem;
   }
   .predefinedTimersTitle {
-      margin: 30px 0 0;
-      font-size: 2.5rem;
+      margin: 1.5rem 0 0;
+      font-size: 1.25rem;
       text-transform: uppercase;
   }
   .timer {
-      margin: 1rem auto;
-      max-width: 360px;
+      margin: 0.5rem auto;
+      max-width: 400px;
       border:aliceblue solid 2px;
   }
   
@@ -71,10 +72,10 @@
       color: inherit;
       background-color: var(--backgroundColor);
       border: 2px solid;
-      margin: 1rem auto;
+      margin: 0.5rem auto;
       padding: 10px;
       font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", monospace;
-      font-size: 2rem;
+      font-size: 1rem;
       text-transform: uppercase;
       text-align-last:center;
       display: inline-block;
@@ -91,10 +92,8 @@
   }
   .nextTimersArea {
       list-style: none;
-      font-size: 48px;
+      font-size: 1.75rem;
       padding:  0;
-      width:  100%;
-      display: inline-block;
   }
   
   .nextTimers__item {
