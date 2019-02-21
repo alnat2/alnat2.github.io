@@ -8,9 +8,9 @@
 	font-size: calc( 15px + (20 - 15) * ((100vw - 320px) / ( 1400 - 320)));
       -webkit-box-sizing: border-box;
               box-sizing: border-box;
-      --focusColor: #cdd210;
-      --backgroundColor: #0d47a1;
-      --mainColor: #fff;
+      --focusColor: #89FC00;
+      --backgroundColor: #00A1E4;
+      --mainColor: #FFFAFF;
       background-color: var(--backgroundColor);
       
   }
