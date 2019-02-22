@@ -21,8 +21,8 @@ function countdownOver() {
 function secondsToTimeLeftString(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainderSeconds = seconds % 60;
-    const display = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
-    return display;
+    const timeLeft = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
+    return timeLeft;
 }
 function displayTimeLeft(seconds) {
     let timeLeft = secondsToTimeLeftString(seconds);
@@ -91,15 +91,28 @@ function displayNextTimers() {
         nextTimers.appendChild(insertArea);
     }
 }
-function inputValidate(input) {
-    let minutes, symbol;
-    minutes = input.value;
-    let unaccept = minutes.match(/[^\d\+\*\.]+/g);
+// function inputValidate(input) {
+//     let minutes, symbol;
+//     minutes = input.value;
+//     let unaccept = minutes.match(/[^\d\+\*\.]+/g);
+//     if (unaccept !== null) {
+//         displayArea.children[2].innerHTML = `${unaccept.join(' ')} ${symbol = unaccept.length == 1 ? 'unacceptable symbol' : 'unacceptable symbols'}`;
+//         return;
+//     }
+//     input.value = '';
+//     return minutes;
+// }
+function inputValidate(input, acceptReg) {
+    let minutes = {};
+    const re = new RegExp(acceptReg, 'g');
+    let unaccept = input.match(re);
     if (unaccept !== null) {
-        displayArea.children[2].innerHTML = `${unaccept.join(' ')} ${symbol = unaccept.length == 1 ? 'unacceptable symbol' : 'unacceptable symbols'}`;
-        return;
+        minutes.valid = false;
+        minutes.unaccept = unaccept.join(' ');
+        return minutes;
     }
-    input.value = '';
+    minutes.valid = true;
+    minutes.data = input;
     return minutes;
 }
 function valuesToArray(str) {
@@ -154,7 +167,13 @@ function timerStart(duration) {
 }
 function timersRun() {
     if (timerInput.value) {
-        valuesToArray(inputValidate(timerInput));
+        const validatedInput = inputValidate(timerInput.value, '[^\\d\+\\*\\.]+');
+        let symbol;
+        if (!validatedInput.valid) {
+            displayArea.children[2].innerHTML = `${validatedInput.unaccept} ${symbol = validatedInput.unaccept.length == 1 ? 'unacceptable symbol' : 'unacceptable symbols'}`;
+        return;
+        }
+        valuesToArray(validatedInput.data);
         if (timers === undefined || timers.length == 0) return;
         timerStart(timers[timers.length - 1] * 60);
     } else {
