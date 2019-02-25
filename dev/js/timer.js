@@ -15,8 +15,8 @@ const timerDisplay = document.querySelector('.displayTimeLeft');
 const timerTotalTime = document.querySelector('.displayTimeTotal');
 const soundComplete = document.getElementById('complete');
 
-function countdownOver() {
-    soundComplete.play();
+function countdownOver(snd) {
+    snd.play();
 }
 function secondsToTimeLeftString(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -91,17 +91,6 @@ function displayNextTimers() {
         nextTimers.appendChild(insertArea);
     }
 }
-// function inputValidate(input) {
-//     let minutes, symbol;
-//     minutes = input.value;
-//     let unaccept = minutes.match(/[^\d\+\*\.]+/g);
-//     if (unaccept !== null) {
-//         displayArea.children[2].innerHTML = `${unaccept.join(' ')} ${symbol = unaccept.length == 1 ? 'unacceptable symbol' : 'unacceptable symbols'}`;
-//         return;
-//     }
-//     input.value = '';
-//     return minutes;
-// }
 function inputValidate(input, acceptReg) {
     let minutes = {};
     const re = new RegExp(acceptReg, 'g');
@@ -161,7 +150,7 @@ function timer(seconds) {
     countdown = setInterval(() => {
         secondsLeft = Math.round((then - Date.now()) / 1000);
         if (secondsLeft < 0) {
-            countdownOver();
+            countdownOver(soundComplete);
             timers.pop();
             clearInterval(countdown);
             if (timers.length > 0) {
