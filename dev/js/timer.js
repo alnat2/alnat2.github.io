@@ -29,15 +29,15 @@ function displayTimeLeft(seconds, displayElement) {
     document.title = timeLeft;
     displayElement.textContent = timeLeft;
 }
-function displayTotalTime(arr) {
+function displayTotalTime(arr, displayElement) {
     if (arr.length == 1) {
-        timerTotalTime.textContent = '';
+        displayElement.textContent = '';
         return;
     }
     let total = arr.reduce((a, v) => {
         return parseInt(a) + parseInt(v);
     });
-    timerTotalTime.textContent = `total timers time is: ${total} ${total == 1 ? 'minute' : "minutes"}`;
+    displayElement.textContent = `total timers time is: ${total} ${total == 1 ? 'minute' : "minutes"}`;
 }
 function displayTimersPredefined(arr) {
     const insertArea = document.createDocumentFragment();
@@ -143,7 +143,7 @@ function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
 function timer(seconds) {
     clearInterval(countdown);
     displayNextTimers();
-    displayTotalTime(timers);
+    displayTotalTime(timers, timerTotalTime);
     const now = Date.now();
     const then = now + seconds * 1000;
     displayTimeLeft(seconds, timerDisplay);
@@ -229,7 +229,7 @@ nextTimers.addEventListener('click', e => {
     if (e.target.className === 'deleteBtn') {
         timers.splice(pos, 1);
         displayNextTimers();
-        displayTotalTime(timers);
+        displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
         timers.reverse();
