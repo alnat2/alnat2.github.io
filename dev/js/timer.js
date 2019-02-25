@@ -115,28 +115,41 @@ function inputValidate(input, acceptReg) {
     minutes.data = input;
     return minutes;
 }
-function valuesToArray(str) {
+function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
     if (!str) return;
-    str.split('+').forEach((i) => {
-      if (i.includes('*')) {
-        let tempArr = i.split('*');
-        let mul = 1;
-        if (tempArr.length >= 3) {
-          for (let i = 1; i < tempArr.length; i++) {
-            mul *= parseInt(tempArr[i]);
-          }
+    let arr = [];
+    const splitedArr = str.split(limiter1);
+    for (let i = 0; i < splitedArr.length; i++) {
+        if (splitedArr[i].includes(limiter2)) {
+            let tempArr = splitedArr[i].split(limiter2);
+            let mul = 1;
+            if (tempArr.length >= 3) {
+              for (let i = 1; i < tempArr.length; i++) {
+                mul *= parseInt(tempArr[i]);
+              }
+            } else {
+               mul = parseInt(tempArr[1]);
+            }
+            while (mul) {
+                if (isNaN(tempArr[0])) {
+                    arr = [];
+                    arr[0] = 'nan';
+                    return arr;
+                }
+                arr.push(tempArr[0]);
+              mul --;
+                   }
         } else {
-           mul = parseInt(tempArr[1]);
-        }
-        while (mul) {
-               timers.push(tempArr[0]);
-          mul --;
-               }
-      } else {
-        timers.push(i);
-      }
-      })
-    timers.reverse();
+            if (isNaN(splitedArr[i])) {
+                arr = [];
+                arr[0] = 'nan';
+                return arr;
+            }
+            arr.push(splitedArr[i]);
+          }   
+    }
+    arr.reverse();
+    return arr;
 }
 function timer(seconds) {
     clearInterval(countdown);
@@ -171,11 +184,17 @@ function timersRun() {
         let symbol;
         if (!validatedInput.valid) {
             displayArea.children[2].innerHTML = `${validatedInput.unaccept} ${symbol = validatedInput.unaccept.length == 1 ? 'unacceptable symbol' : 'unacceptable symbols'}`;
-        return;
+            return;
         }
-        valuesToArray(validatedInput.data);
+        timers = valuesToArray(validatedInput.data);
         if (timers === undefined || timers.length == 0) return;
+        
+        if (timers[0] === 'nan') {
+            displayArea.children[2].innerHTML = 'incorrect sequence';
+            return;
+        }
         timerStart(timers[timers.length - 1] * 60);
+        timerInput.value = '';
     } else {
         timerPauseResume();
     }
@@ -195,14 +214,14 @@ if (timersPredefined.length > 3) {
     const predefinedSelect = document.getElementById('predefinedSelect');
     predefinedSelect.addEventListener('click', e => {
         if (e.currentTarget === e.target && navigator.userAgent.indexOf("Firefox") != -1) return;
-        valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
+        timers = valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
         timerStart(timers[timers.length - 1] * 60);
     });
 } else{
     displayTimersPredefined(timersPredefined);
     displayArea.addEventListener('click', e => {
         if (e.target.tagName === 'BUTTON') {
-            valuesToArray(e.target.innerHTML);
+            timers = valuesToArray(e.target.innerHTML);
             timerStart(timers[timers.length - 1] * 60);
         }
     });
@@ -226,7 +245,7 @@ nextTimers.addEventListener('click', e => {
         timers.splice(pos);
         timers.reverse();
         let newTimers = timers.join('+');
-        valuesToArray(newTimers);
+        timers = valuesToArray(newTimers);
         timerStart(timers[timers.length - 1] * 60);
     }
 });
