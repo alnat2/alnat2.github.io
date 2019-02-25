@@ -24,10 +24,10 @@ function secondsToTimeLeftString(seconds) {
     const timeLeft = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
     return timeLeft;
 }
-function displayTimeLeft(seconds) {
+function displayTimeLeft(seconds, displayElement) {
     let timeLeft = secondsToTimeLeftString(seconds);
     document.title = timeLeft;
-    timerDisplay.textContent = timeLeft;
+    displayElement.textContent = timeLeft;
 }
 function displayTotalTime(arr) {
     if (arr.length == 1) {
@@ -146,7 +146,7 @@ function timer(seconds) {
     displayTotalTime(timers);
     const now = Date.now();
     const then = now + seconds * 1000;
-    displayTimeLeft(seconds);
+    displayTimeLeft(seconds, timerDisplay);
     countdown = setInterval(() => {
         secondsLeft = Math.round((then - Date.now()) / 1000);
         if (secondsLeft < 0) {
@@ -160,7 +160,7 @@ function timer(seconds) {
             }
             return;
         }
-        displayTimeLeft(secondsLeft);
+        displayTimeLeft(secondsLeft, timerDisplay);
     }, 1000);
 }
 function timerStart(duration) {
