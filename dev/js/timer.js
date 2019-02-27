@@ -39,28 +39,17 @@ function displayTotalTime(arr, displayElement) {
     });
     displayElement.textContent = `total timers time is: ${total} ${total == 1 ? 'minute' : "minutes"}`;
 }
-function displayTimersPredefined(arr) {
-    const insertArea = document.createDocumentFragment();
-    for (let i = 0; i < arr.length; i++) {
-        const insertElement = document.createElement('button');
-        insertElement.className = "display__time-predefined";
-        insertElement.innerHTML = arr[i];
-        insertArea.appendChild(insertElement);
+function displayPredefinedTimers(obj) {
+    const insertContainer = document.createElement(obj.container);
+    const el = obj.container === 'select' ? 'option' : 'button';
+    insertContainer.setAttribute('id', 'predefinedContainer');
+    for (let i = 0; i < obj.arr.length; i++) {
+        const insertElement = document.createElement(el);
+        insertElement.className = obj.elCls;
+        insertElement.innerHTML = obj.arr[i];
+        insertContainer.appendChild(insertElement);
     }
-    displayArea.appendChild(insertArea);
-}
-function displayTimersPredefinedSelect(arr) {
-    const insertArea = document.createDocumentFragment();
-    const insertSelect = document.createElement('select');
-    insertSelect.setAttribute('id', 'predefinedSelect');
-    for (let i = 0; i < arr.length; i++) {
-        const insertElement = document.createElement('option');
-        insertElement.className = "display__time-predefined";
-        insertElement.innerHTML = arr[i];
-        insertSelect.appendChild(insertElement);
-    }
-    insertArea.appendChild(insertSelect);
-    displayArea.appendChild(insertArea);
+    obj.displayElement.appendChild(insertContainer);
 }
 function displayNextTimers() {
     if (nextTimers.hasChildNodes()) {
@@ -199,25 +188,29 @@ function timerPauseResume() {
 }
 
 if (timersPredefined.length > 3) {
-    displayTimersPredefinedSelect(timersPredefined);
-    const predefinedSelect = document.getElementById('predefinedSelect');
-    predefinedSelect.addEventListener('click', e => {
+    displayPredefinedTimers({
+        arr: timersPredefined, 
+        container: 'select', 
+        elCls: 'display__time-predefined', 
+        displayElement: displayArea });
+} else{
+    displayPredefinedTimers({
+        arr: timersPredefined, 
+        container: 'div', 
+        elCls: 'display__time-predefined', 
+        displayElement: displayArea });
+}
+const predefinedContainer = document.getElementById('predefinedContainer');
+predefinedContainer.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+        timers = valuesToArray(e.target.innerHTML);
+    } else {
         if (e.currentTarget === e.target && navigator.userAgent.indexOf("Firefox") != -1) return;
         timers = valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
-        timerStart(timers[timers.length - 1] * 60);
-    });
-} else{
-    displayTimersPredefined(timersPredefined);
-    displayArea.addEventListener('click', e => {
-        if (e.target.tagName === 'BUTTON') {
-            timers = valuesToArray(e.target.innerHTML);
-            timerStart(timers[timers.length - 1] * 60);
-        }
-    });
-}
-
+    }
+    timerStart(timers[timers.length - 1] * 60);
+});
 timerRunButton.addEventListener('click', timersRun);
-
 timerInput.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
