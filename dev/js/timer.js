@@ -45,40 +45,48 @@ function displayPredefinedTimers(obj) {
     insertContainer.setAttribute('id', 'predefinedContainer');
     for (let i = 0; i < obj.arr.length; i++) {
         const insertElement = document.createElement(el);
-        insertElement.className = obj.elCls;
-        insertElement.innerHTML = obj.arr[i];
+        Object.assign(insertElement, {
+            className: obj.elCls,
+            innerHTML: obj.arr[i]
+           })
         insertContainer.appendChild(insertElement);
     }
     obj.displayElement.appendChild(insertContainer);
 }
-function displayNextTimers() {
-    if (nextTimers.hasChildNodes()) {
-        nextTimers.innerHTML = '';
+function displayNextTimers(obj) {
+    if (obj.displayElement.hasChildNodes()) {
+        obj.displayElement.innerHTML = '';
     }
-    if (timers.length == 1) {
-        const insertCurrentElement = document.createElement("li");
-        insertCurrentElement.className = "nextTimers__item";
-        insertCurrentElement.innerHTML = 'No more timers';
-        nextTimers.appendChild(insertCurrentElement);
+    const insertArea = document.createElement('ul');
+    if (obj.arr.length == 1) {
+        const insertCurrentElement = document.createElement('li');
+        Object.assign(insertCurrentElement, {
+            className: obj.elCls,
+            innerHTML: 'No more timers'
+           })
+        insertArea.appendChild(insertCurrentElement);
     } else {
-        const insertArea = document.createDocumentFragment();
-        for (let i = timers.length - 2; i >= 0; i--) {
-            const insertCurrentElement = document.createElement("li");
+        for (let i = obj.arr.length - 2; i >= 0; i--) {
+            const insertCurrentElement = document.createElement('li');
+            insertCurrentElement.className = obj.elCls;
             const startBtn = document.createElement('button');
-            startBtn.className = "startBtn";
-            startBtn.setAttribute("data-arrPos", (i + 1) - timers.length);
-            startBtn.innerHTML = timers[i];
+            Object.assign(startBtn, {
+                className: 'startBtn',
+                innerHTML: obj.arr[i]
+               })
+            startBtn.setAttribute("data-arrPos", (i + 1) - obj.arr.length);
             const deleteBtn = document.createElement('button');
-            deleteBtn.className = "deleteBtn";
-            deleteBtn.setAttribute("data-arrPos", i - timers.length);
-            deleteBtn.innerHTML = "delete";
-            insertCurrentElement.className = "nextTimers__item";
+            Object.assign(deleteBtn, {
+                className: 'deleteBtn',
+                innerHTML: 'delete'
+               })
+            deleteBtn.setAttribute("data-arrPos", i - obj.arr.length);          
             insertCurrentElement.appendChild(startBtn);
             insertCurrentElement.appendChild(deleteBtn);
             insertArea.appendChild(insertCurrentElement);
         }
-        nextTimers.appendChild(insertArea);
     }
+    obj.displayElement.appendChild(insertArea);
 }
 function inputValidate(input, acceptReg) {
     let minutes = {};
@@ -131,7 +139,10 @@ function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
 }
 function timer(seconds) {
     clearInterval(countdown);
-    displayNextTimers();
+    displayNextTimers({
+        arr: timers,
+        elCls: 'nextTimers__item', 
+        displayElement: nextTimers });
     displayTotalTime(timers, timerTotalTime);
     const now = Date.now();
     const then = now + seconds * 1000;
@@ -221,7 +232,10 @@ nextTimers.addEventListener('click', e => {
     const pos = e.target.dataset.arrpos;
     if (e.target.className === 'deleteBtn') {
         timers.splice(pos, 1);
-        displayNextTimers();
+        displayNextTimers({
+            arr: timers,
+            elCls: 'nextTimers__item', 
+            displayElement: nextTimers });
         displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
