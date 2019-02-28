@@ -239,9 +239,6 @@ nextTimers.addEventListener('click', e => {
         displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
-        timers.reverse();
-        let newTimers = timers.join('+');
-        timers = valuesToArray(newTimers);
         timerStart(timers[timers.length - 1] * 60);
     }
 });
