@@ -40,53 +40,55 @@ function displayTotalTime(arr, displayElement) {
     displayElement.textContent = `total timers time is: ${total} ${total == 1 ? 'minute' : "minutes"}`;
 }
 function displayPredefinedTimers(obj) {
-    const insertContainer = document.createElement(obj.container);
-    const el = obj.container === 'select' ? 'option' : 'button';
+    const {displayElement, container= 'select', elCls = 'display__time-predefined', arr } = obj;
+    const insertContainer = document.createElement(container);
+    const el = container === 'select' ? 'option' : 'button';
     insertContainer.setAttribute('id', 'predefinedContainer');
-    for (let i = 0; i < obj.arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
         const insertElement = document.createElement(el);
         Object.assign(insertElement, {
-            className: obj.elCls,
-            innerHTML: obj.arr[i]
+            className: elCls,
+            innerHTML: arr[i]
            })
         insertContainer.appendChild(insertElement);
     }
-    obj.displayElement.appendChild(insertContainer);
+    displayElement.appendChild(insertContainer);
 }
 function displayNextTimers(obj) {
-    if (obj.displayElement.hasChildNodes()) {
-        obj.displayElement.innerHTML = '';
+    const {displayElement, elCls = 'nextTimers__item', arr } = obj;
+    if (displayElement.hasChildNodes()) {
+        displayElement.innerHTML = '';
     }
     const insertArea = document.createElement('ul');
-    if (obj.arr.length == 1) {
+    if (arr.length == 1) {
         const insertCurrentElement = document.createElement('li');
         Object.assign(insertCurrentElement, {
-            className: obj.elCls,
+            className: elCls,
             innerHTML: 'No more timers'
            })
         insertArea.appendChild(insertCurrentElement);
     } else {
-        for (let i = obj.arr.length - 2; i >= 0; i--) {
+        for (let i = arr.length - 2; i >= 0; i--) {
             const insertCurrentElement = document.createElement('li');
-            insertCurrentElement.className = obj.elCls;
+            insertCurrentElement.className = elCls;
             const startBtn = document.createElement('button');
             Object.assign(startBtn, {
                 className: 'startBtn',
-                innerHTML: obj.arr[i]
+                innerHTML: arr[i]
                })
-            startBtn.setAttribute("data-arrPos", (i + 1) - obj.arr.length);
+            startBtn.setAttribute("data-arrPos", (i + 1) - arr.length);
             const deleteBtn = document.createElement('button');
             Object.assign(deleteBtn, {
                 className: 'deleteBtn',
                 innerHTML: 'delete'
                })
-            deleteBtn.setAttribute("data-arrPos", i - obj.arr.length);          
+            deleteBtn.setAttribute("data-arrPos", i - arr.length);          
             insertCurrentElement.appendChild(startBtn);
             insertCurrentElement.appendChild(deleteBtn);
             insertArea.appendChild(insertCurrentElement);
         }
     }
-    obj.displayElement.appendChild(insertArea);
+    displayElement.appendChild(insertArea);
 }
 function inputValidate(input, acceptReg) {
     let minutes = {};
@@ -140,8 +142,7 @@ function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
 function timer(seconds) {
     clearInterval(countdown);
     displayNextTimers({
-        arr: timers,
-        elCls: 'nextTimers__item', 
+        arr: timers, 
         displayElement: nextTimers });
     displayTotalTime(timers, timerTotalTime);
     const now = Date.now();
@@ -201,14 +202,11 @@ function timerPauseResume() {
 if (timersPredefined.length > 3) {
     displayPredefinedTimers({
         arr: timersPredefined, 
-        container: 'select', 
-        elCls: 'display__time-predefined', 
         displayElement: displayArea });
 } else{
     displayPredefinedTimers({
         arr: timersPredefined, 
         container: 'div', 
-        elCls: 'display__time-predefined', 
         displayElement: displayArea });
 }
 const predefinedContainer = document.getElementById('predefinedContainer');
@@ -234,7 +232,6 @@ nextTimers.addEventListener('click', e => {
         timers.splice(pos, 1);
         displayNextTimers({
             arr: timers,
-            elCls: 'nextTimers__item', 
             displayElement: nextTimers });
         displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
