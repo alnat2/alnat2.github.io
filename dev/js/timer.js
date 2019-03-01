@@ -145,12 +145,13 @@ function timer(seconds) {
         arr: timers, 
         displayElement: nextTimers });
     displayTotalTime(timers, timerTotalTime);
-    const now = Date.now();
-    const then = now + seconds * 1000;
+    const start = Date.now();
+    const end = start + seconds * 1000;
     displayTimeLeft(seconds, timerDisplay);
     countdown = setInterval(() => {
-        secondsLeft = Math.round((then - Date.now()) / 1000);
-        if (secondsLeft < 0) {
+        secondsLeft = Math.round((end - Date.now()) / 1000);
+        if (secondsLeft == 0) {
+            displayTimeLeft(secondsLeft, timerDisplay);
             countdownOver(soundComplete);
             timers.pop();
             clearInterval(countdown);
@@ -164,11 +165,7 @@ function timer(seconds) {
         displayTimeLeft(secondsLeft, timerDisplay);
     }, 1000);
 }
-function timerStart(duration) {
-    timer(duration);
-    timerRunButton.textContent = '⏸';
-}
-function timersRun() {
+function timersRun(e) {
     if (timerInput.value) {
         const validatedInput = inputValidate(timerInput.value, '[^\\d\+\\*\\.]+');
         let symbol;
@@ -183,19 +180,20 @@ function timersRun() {
             displayArea.children[2].innerHTML = 'incorrect sequence';
             return;
         }
-        timerStart(timers[timers.length - 1] * 60);
+        timerStartPause(e, timers[timers.length - 1] * 60);
         timerInput.value = '';
     } else {
-        timerPauseResume();
+        timerStartPause(e, secondsLeft);
     }
 }
-function timerPauseResume() {
-    if (!countdown) return;
-    if (timerRunButton.textContent === '⏸') {
+function timerStartPause(e, dur) {
+    if (e.target.textContent === '⏸') {
         timerRunButton.textContent = '▶';
         clearInterval(countdown);
     } else {
-        timerStart(secondsLeft);
+        if (!dur) return;
+        timer(dur);
+        timerRunButton.textContent = '⏸';
     }
 }
 
@@ -217,13 +215,13 @@ predefinedContainer.addEventListener('click', e => {
         if (e.currentTarget === e.target && navigator.userAgent.indexOf("Firefox") != -1) return;
         timers = valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
     }
-    timerStart(timers[timers.length - 1] * 60);
+    timerStartPause(e, timers[timers.length - 1] * 60);
 });
-timerRunButton.addEventListener('click', timersRun);
-timerInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        timersRun();
+timerRunButton.addEventListener('click', e => timersRun(e));
+timerInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        timersRun(e);
     }
 });
 nextTimers.addEventListener('click', e => {
@@ -236,6 +234,6 @@ nextTimers.addEventListener('click', e => {
         displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
-        timerStart(timers[timers.length - 1] * 60);
+        timerStartPause(e, timers[timers.length - 1] * 60);
     }
 });
