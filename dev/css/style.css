@@ -12,13 +12,13 @@
       --backgroundColor: #00A1E4;
       --mainColor: #FFFAFF; */
       /* light theme */
-      /* --focusColor: #ec8496;
-      --backgroundColor: #B0DDC2;
-      --mainColor: #2D1832; */
+      --focusColor: #341A04;
+      --backgroundColor: #26727E;
+      --mainColor: #EBF4FA;
       /* dark theme */
-      --focusColor: #398557;
+      /* --focusColor: #398557;
       --backgroundColor: #1D1F20;
-      --mainColor: #E06D10;
+      --mainColor: #E06D10; */
       background-color: var(--backgroundColor);
   }
   
