@@ -8,11 +8,18 @@
 	font-size: calc( 15px + (20 - 15) * ((100vw - 320px) / ( 1400 - 320)));
       -webkit-box-sizing: border-box;
               box-sizing: border-box;
-      --focusColor: #89FC00;
+      /* --focusColor: #89FC00;
       --backgroundColor: #00A1E4;
-      --mainColor: #FFFAFF;
+      --mainColor: #FFFAFF; */
+      /* light theme */
+      /* --focusColor: #ec8496;
+      --backgroundColor: #B0DDC2;
+      --mainColor: #2D1832; */
+      /* dark theme */
+      --focusColor: #398557;
+      --backgroundColor: #1D1F20;
+      --mainColor: #E06D10;
       background-color: var(--backgroundColor);
-      
   }
   
   *,
