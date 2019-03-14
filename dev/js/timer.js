@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 let countdownRun;
 let timers = [];
-const timersPredefined = 
+const timersPreset = 
 ['15+5+15+9+15',
  '15*3',
  '15+10+15',
@@ -214,13 +214,13 @@ function timerStartPause(e, dur) {
     }
 }
 
-if (timersPredefined.length > 3) {
+if (timersPreset.length > 3) {
     displayPredefinedTimers({
-        arr: timersPredefined, 
+        arr: timersPreset, 
         displayElement: displayArea });
 } else{
     displayPredefinedTimers({
-        arr: timersPredefined, 
+        arr: timersPreset, 
         container: 'div', 
         displayElement: displayArea });
 }
