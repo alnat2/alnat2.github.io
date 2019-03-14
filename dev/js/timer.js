@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 let countdown;
+let countdownRun;
 let secondsLeft;
 let timers = [];
 const timersPredefined = 
@@ -139,32 +140,55 @@ function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
     arr.reverse();
     return arr;
 }
-function timer(seconds) {
-    clearInterval(countdown);
+function* counter(n = 1){
+    var fn1 = n;
+    while (true){
+      var reset = yield fn1;
+      fn1 --;
+      if (reset){
+          fn1 = reset + 1;
+      }
+    }
+  }
+function initGenerator(gFunc) {
+    const generator = gFunc();
+    generator.next();
+    return generator;
+}
+const cdCounter = initGenerator(counter);
+
+function timeOver() {
+    countdownOver(soundComplete);
+    timers.pop();
+    if (timers.length > 0) {
+        timeStart(timers[timers.length - 1]);
+    } else {
+        timerRunButton.textContent = '▶';
+    }
+}
+function timeStart(min) {
+    let sec = min * 60;
+    clearInterval(countdownRun);
     displayNextTimers({
         arr: timers, 
         displayElement: nextTimers });
     displayTotalTime(timers, timerTotalTime);
-    const start = Date.now();
-    const end = start + seconds * 1000;
-    displayTimeLeft(seconds, timerDisplay);
-    countdown = setInterval(() => {
-        secondsLeft = Math.round((end - Date.now()) / 1000);
-        if (secondsLeft == 0) {
-            displayTimeLeft(secondsLeft, timerDisplay);
-            countdownOver(soundComplete);
-            timers.pop();
-            clearInterval(countdown);
-            if (timers.length > 0) {
-                timer(timers[timers.length - 1] * 60);
-            } else {
-                timerRunButton.textContent = '▶';
-            }
-            return;
-        }
+    if (min) {
+        cdCounter.next(sec);
+        displayTimeLeft(sec, timerDisplay);
+    } 
+    countdownRun = setInterval(() => {
+        secondsLeft = cdCounter.next().value;
         displayTimeLeft(secondsLeft, timerDisplay);
-    }, 1000);
+        if (secondsLeft <= 0) {
+          clearInterval(countdownRun);
+          timeOver();
+            }
+      }, 1000)
 }
+
+
+
 function timersRun(e) {
     if (timerInput.value) {
         const validatedInput = inputValidate(timerInput.value, '[^\\d\+\\*\\.]+');
@@ -174,25 +198,24 @@ function timersRun(e) {
             return;
         }
         timers = valuesToArray(validatedInput.data);
-        if (timers === undefined || timers.length == 0) return;
-        
         if (timers[0] === 'nan') {
             displayArea.children[2].innerHTML = 'incorrect sequence';
             return;
         }
-        timerStartPause(e, timers[timers.length - 1] * 60);
+        timerStartPause1(e, timers[timers.length - 1]);
         timerInput.value = '';
     } else {
-        timerStartPause(e, secondsLeft);
+        timerStartPause1(e, null);
     }
 }
-function timerStartPause(e, dur) {
+
+function timerStartPause1(e, dur) {
     if (e.target.textContent === '⏸') {
         timerRunButton.textContent = '▶';
-        clearInterval(countdown);
+        clearInterval(countdownRun);
     } else {
-        if (!dur) return;
-        timer(dur);
+        if (dur === undefined) return;
+        timeStart(dur);
         timerRunButton.textContent = '⏸';
     }
 }
@@ -215,11 +238,11 @@ predefinedContainer.addEventListener('click', e => {
         if (e.currentTarget === e.target && navigator.userAgent.indexOf("Firefox") != -1) return;
         timers = valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
     }
-    timerStartPause(e, timers[timers.length - 1] * 60);
+    timerStartPause1(e, timers[timers.length - 1]);
 });
 timerRunButton.addEventListener('click', e => timersRun(e));
-timerInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
+timerInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
         e.preventDefault();
         timersRun(e);
     }
@@ -234,6 +257,6 @@ nextTimers.addEventListener('click', e => {
         displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
-        timerStartPause(e, timers[timers.length - 1] * 60);
+        timerStartPause1(e, timers[timers.length - 1]);
     }
 });
