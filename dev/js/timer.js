@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
-let countdown;
 let countdownRun;
-let secondsLeft;
 let timers = [];
 const timersPredefined = 
 ['15+5+15+9+15',
@@ -178,7 +176,7 @@ function timeStart(min) {
         displayTimeLeft(sec, timerDisplay);
     } 
     countdownRun = setInterval(() => {
-        secondsLeft = cdCounter.next().value;
+        let secondsLeft = cdCounter.next().value;
         displayTimeLeft(secondsLeft, timerDisplay);
         if (secondsLeft <= 0) {
           clearInterval(countdownRun);
@@ -186,9 +184,6 @@ function timeStart(min) {
             }
       }, 1000)
 }
-
-
-
 function timersRun(e) {
     if (timerInput.value) {
         const validatedInput = inputValidate(timerInput.value, '[^\\d\+\\*\\.]+');
@@ -202,14 +197,13 @@ function timersRun(e) {
             displayArea.children[2].innerHTML = 'incorrect sequence';
             return;
         }
-        timerStartPause1(e, timers[timers.length - 1]);
+        timerStartPause(e, timers[timers.length - 1]);
         timerInput.value = '';
     } else {
-        timerStartPause1(e, null);
+        timerStartPause(e, null);
     }
 }
-
-function timerStartPause1(e, dur) {
+function timerStartPause(e, dur) {
     if (e.target.textContent === '⏸') {
         timerRunButton.textContent = '▶';
         clearInterval(countdownRun);
@@ -238,7 +232,7 @@ predefinedContainer.addEventListener('click', e => {
         if (e.currentTarget === e.target && navigator.userAgent.indexOf("Firefox") != -1) return;
         timers = valuesToArray(e.currentTarget.selectedOptions[0].innerHTML);
     }
-    timerStartPause1(e, timers[timers.length - 1]);
+    timerStartPause(e, timers[timers.length - 1]);
 });
 timerRunButton.addEventListener('click', e => timersRun(e));
 timerInput.addEventListener('keypress', e => {
@@ -257,6 +251,6 @@ nextTimers.addEventListener('click', e => {
         displayTotalTime(timers, timerTotalTime);
     } else if (e.target.className === 'startBtn') {
         timers.splice(pos);
-        timerStartPause1(e, timers[timers.length - 1]);
+        timerStartPause(e, timers[timers.length - 1]);
     }
 });
