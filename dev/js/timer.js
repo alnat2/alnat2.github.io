@@ -161,7 +161,7 @@ function timeOver() {
     if (timers.length > 0) {
         timeStart(timers[timers.length - 1]);
     } else {
-        timerRunButton.textContent = '▶';
+        timerStartPause('complete');
     }
 }
 function timeStart(min) {
@@ -204,7 +204,7 @@ function timersRun(e) {
     }
 }
 function timerStartPause(e, dur) {
-    if (e.target.textContent === '⏸') {
+    if (e === 'complete' || e.target.textContent === '⏸') {
         timerRunButton.textContent = '▶';
         clearInterval(countdownRun);
     } else {
