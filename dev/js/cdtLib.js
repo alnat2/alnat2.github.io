@@ -107,7 +107,7 @@ export function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
                     arr[0] = 'nan';
                     return arr;
                 }
-                arr.push(tempArr[0]);
+                if (tempArr[0]) arr.push(tempArr[0]);
               mul --;
                    }
         } else {
@@ -116,7 +116,7 @@ export function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
                 arr[0] = 'nan';
                 return arr;
             }
-            arr.push(splitedArr[i]);
+            if (splitedArr[i]) arr.push(splitedArr[i]);
           }   
     }
     arr.reverse();
