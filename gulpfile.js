@@ -24,7 +24,11 @@ function minjs() {
 	  .pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
 	  .pipe(minify({
 		builtIns: false
-	  }))
+	  },
+      {
+        sourceType: "module"
+  }
+    ))
 	  .pipe(gulp.dest("./js"))
 }
 
