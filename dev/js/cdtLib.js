@@ -107,16 +107,17 @@ export function valuesToArray(str, limiter1 = '+', limiter2 = '*') {
                     arr[0] = 'nan';
                     return arr;
                 }
-                if (tempArr[0]) arr.push(tempArr[0]);
-              mul --;
-                   }
+                if (tempArr[0] !== '0' && tempArr[0]) arr.push(tempArr[0]);
+                    mul --;
+                }
         } else {
             if (isNaN(splitedArr[i])) {
                 arr = [];
                 arr[0] = 'nan';
                 return arr;
             }
-            if (splitedArr[i]) arr.push(splitedArr[i]);
+            if (splitedArr[i] === '0' || !splitedArr[i]) continue;
+            arr.push(splitedArr[i]);
           }   
     }
     arr.reverse();
