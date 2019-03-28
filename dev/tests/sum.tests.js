@@ -111,3 +111,116 @@ describe('displayTotalTime function testing', function () {
     chai.expect(displayEl.textContent).to.equal('');
   });
 });
+describe('displayPredefinedTimers function testing', function () {
+  it('should return 4 children for select element', function () {
+    const displayEl = document.getElementById('da');
+    const arr = 
+      ['15+5+15+9+15',
+      '15*3',
+      '15+10+15',
+      '15+11+15+10+15+8+15'];
+    cd.displayPredefinedTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children.length).to.equal(4);
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return 15*3 string', function () {
+    const displayEl = document.getElementById('da');
+    const arr = 
+      ['15+5+15+9+15',
+      '15*3',
+      '15+10+15',
+      '15+11+15+10+15+8+15'];
+    cd.displayPredefinedTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[1].value).to.equal('15*3');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return element name "OPTION"', function () {
+    const displayEl = document.getElementById('da');
+    const arr = 
+      ['15+5+15+9+15',
+      '15*3',
+      '15+10+15',
+      '15+11+15+10+15+8+15'];
+    cd.displayPredefinedTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[1].nodeName).to.equal('OPTION');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return element name "BUTTON"', function () {
+    const displayEl = document.getElementById('da');
+    const arr = 
+      ['15+5+15+9+15',
+      '15*3',
+      '15+11+15+10+15+8+15'];
+    cd.displayPredefinedTimers({
+      arr: arr,
+      container: 'div',
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[1].nodeName).to.equal('BUTTON');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return 2 children for div element', function () {
+    const displayEl = document.getElementById('da');
+    const arr = 
+      ['15+10+15',
+      '15+11+15+8+15'];
+    cd.displayPredefinedTimers({
+      arr: arr,
+      container: 'div',
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children.length).to.equal(2);
+    displayEl.removeChild(displayEl.children[0]);
+  });
+});
+describe('displayNextTimers function testing', function () {
+  it('should return 3 children(without first) for ul element', function () {
+    const displayEl = document.getElementById('da');
+    const arr = ['15','13','1','8'];
+    cd.displayNextTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children.length).to.equal(3);
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return "No more timers" for 1 element', function () {
+    const displayEl = document.getElementById('da');
+    const arr = ['15'];
+    cd.displayNextTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[0].innerHTML).to.equal('No more timers');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return 6 for element value', function () {
+    const displayEl = document.getElementById('da');
+    const arr = ['15', '6', '4'];
+    cd.displayNextTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[0].children[0].innerHTML).to.equal('6');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return "delete" for element value', function () {
+    const displayEl = document.getElementById('da');
+    const arr = ['15', '6', '4'];
+    cd.displayNextTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[0].children[1].innerHTML).to.equal('delete');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+  it('should return -1 for argument value', function () {
+    const displayEl = document.getElementById('da');
+    const arr = ['15', '6', '4'];
+    cd.displayNextTimers({
+      arr: arr,
+      displayElement: displayEl});
+    chai.expect(displayEl.children[0].children[0].children[0].dataset.arrpos).to.equal('-1');
+    displayEl.removeChild(displayEl.children[0]);
+  });
+});
