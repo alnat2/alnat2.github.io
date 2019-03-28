@@ -23,7 +23,6 @@ const timerDisplay = document.querySelector('.displayTimeLeft');
 const timerTotalTime = document.querySelector('.displayTimeTotal');
 const soundComplete = document.getElementById('complete');
 const cdCounter = initGenerator(counter);
-
 function timeOver() {
     countdownOverSignal(soundComplete);
     timers.pop();
